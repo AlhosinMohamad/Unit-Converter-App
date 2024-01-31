@@ -8,7 +8,11 @@ import com.example.unitconverterjetpackcomposesec24.data.db.ConversionResult
 @Composable
 fun HistoryScreen(
 	historyList : State<List<ConversionResult>>,
-	modifier : Modifier = Modifier
+	modifier : Modifier = Modifier,
+	onClosTask: (ConversionResult)-> Unit
 ) {
-	HistoryList(historyList = historyList, onCloseTask = {})
+	HistoryList(historyList = historyList, onCloseTask = {
+		item->
+		onClosTask(item)
+	})
 }

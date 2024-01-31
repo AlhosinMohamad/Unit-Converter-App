@@ -29,6 +29,10 @@ class ConverterViewModel(
 	
 	val resultList= converterRepository.getSavedResults()
 	
-	
+	fun removeResult(result: ConversionResult){
+		viewModelScope.launch(Dispatchers.IO) {
+			converterRepository.deleteResult(result)
+		}
+	}
 	
 }
