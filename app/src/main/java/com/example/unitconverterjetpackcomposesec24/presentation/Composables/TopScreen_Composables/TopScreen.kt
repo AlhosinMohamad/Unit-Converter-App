@@ -10,7 +10,9 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 @Composable
-fun TopScreen(list : List<Converstion>) {
+fun TopScreen(list : List<Converstion>,
+			  save: (String,String)->Unit//this to allow us to pass out tow value which are m1 ,m2 tup to BaseScreen to ViewModel to save them to DB
+) {
 	
 	//this state to catch the current seleted unit from dropdownmenu and save it to pass it to the Input Block To calculate
 	val selectedConversionfromMenu: MutableState<Converstion?> = remember {
@@ -28,6 +30,8 @@ fun TopScreen(list : List<Converstion>) {
 	
 	ConverstionMenu(conversionList = list){
 		selectedConversionfromMenu.value=it//here we give the selected state up to the TopScreen then pass it to the InputBlock
+		
+		typedValue_fromTextField.value="0.0"//to avoid Duplicate values, with new Conversion we make the TextField value zero
 	}
 	
 	selectedConversionfromMenu.value?.let { 
@@ -51,6 +55,9 @@ fun TopScreen(list : List<Converstion>) {
 		
 		val message1= "${typedValue_fromTextField.value}  ${selectedConversionfromMenu.value!!.convertFrom} is equal to: "
 		val message2= "$roundResult ${selectedConversionfromMenu.value!!.convertTo}"
+		
+		save(message1,message2)//pass the values up to baseScreen to ViewModel To save Them in DB
+		
 		ResulrBlock(messag1 = message1, messag2 = message2)
 	}
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.unitconverterjetpackcomposesec24.data.Util.Converstion
 import com.example.unitconverterjetpackcomposesec24.data.db.ConversionResult
 import com.example.unitconverterjetpackcomposesec24.data.repository.ConversionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ConverterViewModel(
@@ -20,10 +21,14 @@ class ConverterViewModel(
 		Converstion(6,"Kilometers to Miles","km","mi",0.621371)
 	)
 	
-	fun addResult(  message1:String, message1:String){
-		viewModelScope.launch {
+	fun addResult(message1 : String, message2 : String){
+		viewModelScope.launch(Dispatchers.IO) {
 			converterRepository.insertResult(ConversionResult(0,message1,message2))
 		}
 	}
+	
+	val resultList= converterRepository.getSavedResults()
+	
+	
 	
 }
