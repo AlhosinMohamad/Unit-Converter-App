@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -33,13 +34,16 @@ import com.example.unitconverterjetpackcomposesec24.data.Util.Converstion
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConverstionMenu(
+	isLandScape: Boolean,
 	conversionList:List<Converstion>,
 	modifier : Modifier=Modifier,
 	convert:(Converstion)->Unit//this function to pass the current seleted unit from dropdownmenu to the Input Block To calculate
 ){
 
 	//1- States in this Screen, *remember: to save the last value of the state to not reassign the initial value when recomposion.
-	var displayingText by remember { mutableStateOf("Select The Conversion Type") }//first text Shown on the dropdown menu
+	// 2- we use displayingText by rememberSaveable to save the value when ConfigurationChanges happen
+	// and beacause displayingText it is not realted to anthor Composables Logic or UI as in TopScreen States
+	var displayingText by rememberSaveable { mutableStateOf("Select The Conversion Type") }//first text Shown on the dropdown menu
 	var textFieldSize by remember {mutableStateOf(Size.Zero)}//To assign the dropdown the same width as textField
 	var expanded by remember {mutableStateOf(false)}
 	
@@ -51,26 +55,46 @@ fun ConverstionMenu(
 	
 	//2-
 	Column {
-	
-	//2.1
-	OutlinedTextField(
-		value = displayingText,
-		onValueChange = {displayingText = it},
-		textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
-		modifier= modifier
-			.fillMaxWidth()
-			.onGloballyPositioned { cordinates ->
-				textFieldSize = cordinates.size.toSize()
-			},
+	if (isLandScape){// in landscape mode we delete all fillmaxwidth() properties
+		OutlinedTextField(
+			value = displayingText,
+			onValueChange = {displayingText = it},
+			textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+			modifier= modifier
+				.onGloballyPositioned { cordinates ->
+					textFieldSize = cordinates.size.toSize()
+				},
 			label = {Text(text = "Convertion Type")},
 			trailingIcon = {
 				Icon(icon, contentDescription = "icon",
-				modifier.clickable {
-					expanded =! expanded
-				})
+					modifier.clickable {
+						expanded =! expanded
+					})
 			},
 			readOnly = true
-	)
+		)
+	}else{
+		OutlinedTextField(
+			value = displayingText,
+			onValueChange = {displayingText = it},
+			textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold),
+			modifier= modifier
+				.fillMaxWidth()// here is the differnece when Landscape is false
+				.onGloballyPositioned { cordinates ->
+					textFieldSize = cordinates.size.toSize()
+				},
+			label = {Text(text = "Convertion Type")},
+			trailingIcon = {
+				Icon(icon, contentDescription = "icon",
+					modifier.clickable {
+						expanded =! expanded
+					})
+			},
+			readOnly = true
+		)
+	}
+	//2.1
+	
 	
 	//2.2 The Dropdown Menu with its Items
 	DropdownMenu(

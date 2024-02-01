@@ -10,7 +10,8 @@ abstract class ConversionDB :RoomDatabase(){
 	
 	abstract val conversionDAO:ConversionDAO
 	
-	companion object{
+	// we do not need this code anymore because we used it in Hilt DI
+	/*companion object{
 		@Volatile
 		private var Instance:ConversionDB?=null
 		fun getInstance(context : Context):ConversionDB{
@@ -29,5 +30,5 @@ abstract class ConversionDB :RoomDatabase(){
 			
 			
 		}
-	}
+	}*/
 }

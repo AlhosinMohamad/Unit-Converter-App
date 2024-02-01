@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ResulrBlock(
+fun ResultBlock(
 	messag1: String,
 	messag2: String,
 	modifier : Modifier=Modifier

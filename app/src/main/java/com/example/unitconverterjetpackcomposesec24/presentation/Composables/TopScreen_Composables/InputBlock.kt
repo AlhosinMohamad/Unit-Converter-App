@@ -30,55 +30,105 @@ import com.example.unitconverterjetpackcomposesec24.data.Util.Converstion
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputBlock(
+	isLandScape: Boolean,
 	converstion : Converstion,
 	inputText: MutableState<String>,
 	modifier : Modifier= Modifier,
 	context: Context = LocalContext.current,//to show the Toast
 	calculate: (String)->Unit//this function to pass the inputed value to calculate out of the inputField to the Upper Composable.
 ){
-	Column(modifier=modifier.padding(0.dp,20.dp,0.dp,0.dp)){
-		Row(modifier=modifier.fillMaxWidth()){
-			TextField(
-				value = inputText.value,
-				onValueChange = {
-					inputText.value = it
-				},
-				modifier=modifier.fillMaxWidth(0.65F),
-				keyboardOptions = KeyboardOptions(
-					capitalization = KeyboardCapitalization.None,
-					autoCorrect = true,
-					keyboardType = KeyboardType.Number
-				),
-				textStyle = TextStyle(color = Color.Red,fontSize=30.sp)
+	
+	if(isLandScape){// in landscape mode we delete all fillmaxwidth() properties
+		Column(modifier=modifier.padding(0.dp,20.dp,0.dp,0.dp)){
+			Row(){
+				TextField(
+					value = inputText.value,
+					onValueChange = {
+						inputText.value = it
+					},
+					
+					keyboardOptions = KeyboardOptions(
+						capitalization = KeyboardCapitalization.None,
+						autoCorrect = true,
+						keyboardType = KeyboardType.Number
+					),
+					textStyle = TextStyle(color = Color.Red,fontSize=30.sp)
 				)
-			
-			Text(
-				text = converstion.convertFrom,
-				fontSize = 24.sp,
-				modifier= modifier
-					.padding(10.dp, 30.dp, 0.dp, 0.dp)
-					.fillMaxWidth(0.35F)
-			)
-		}
-		
-		Spacer(modifier = modifier.height(20.dp))
-		
-		OutlinedButton(
-			onClick = {
-				if(inputText.value !=""){
-					calculate(inputText.value)//we passed the inputed value outside the TextField to the TopScreen to give it th another Composable.
-				}
-				else{
-				Toast.makeText(context,"Enter a Value",Toast.LENGTH_LONG).show()
+				
+				Text(
+					text = converstion.convertFrom,
+					fontSize = 24.sp,
+					modifier= modifier
+						.padding(10.dp, 30.dp, 0.dp, 0.dp)
+						
+				)
 			}
-			},
-			modifier= modifier.fillMaxWidth(1F)
-		) {
-		Text(text = "Convert",
-			fontSize = 36.sp,
-			fontWeight = FontWeight.Bold,
-			color = Color.Blue)
+			
+			Spacer(modifier = modifier.height(20.dp))
+			
+			OutlinedButton(
+				onClick = {
+					if(inputText.value !=""){
+						calculate(inputText.value)//we passed the inputed value outside the TextField to the TopScreen to give it th another Composable.
+					}
+					else{
+						Toast.makeText(context,"Enter a Value",Toast.LENGTH_LONG).show()
+					}
+				},
+			) {
+				Text(text = "Convert",
+					fontSize = 36.sp,
+					fontWeight = FontWeight.Bold,
+					color = Color.Blue)
+			}
 		}
 	}
+	else{
+		Column(modifier=modifier.padding(0.dp,20.dp,0.dp,0.dp)){
+			Row(modifier=modifier.fillMaxWidth()){
+				TextField(
+					value = inputText.value,
+					onValueChange = {
+						inputText.value = it
+					},
+					modifier=modifier.fillMaxWidth(0.65F),
+					keyboardOptions = KeyboardOptions(
+						capitalization = KeyboardCapitalization.None,
+						autoCorrect = true,
+						keyboardType = KeyboardType.Number
+					),
+					textStyle = TextStyle(color = Color.Red,fontSize=30.sp)
+				)
+				
+				Text(
+					text = converstion.convertFrom,
+					fontSize = 24.sp,
+					modifier= modifier
+						.padding(10.dp, 30.dp, 0.dp, 0.dp)
+						.fillMaxWidth(0.35F)
+				)
+			}
+			
+			Spacer(modifier = modifier.height(20.dp))
+			
+			OutlinedButton(
+				onClick = {
+					if(inputText.value !=""){
+						calculate(inputText.value)//we passed the inputed value outside the TextField to the TopScreen to give it th another Composable.
+					}
+					else{
+						Toast.makeText(context,"Enter a Value",Toast.LENGTH_LONG).show()
+					}
+				},
+				modifier= modifier.fillMaxWidth(1F)
+			) {
+				Text(text = "Convert",
+					fontSize = 36.sp,
+					fontWeight = FontWeight.Bold,
+					color = Color.Blue)
+			}
+		}
+	}
+	
 
 }

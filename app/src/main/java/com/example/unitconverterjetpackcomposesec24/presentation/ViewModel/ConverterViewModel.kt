@@ -1,5 +1,8 @@
 package com.example.unitconverterjetpackcomposesec24.presentation.ViewModel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.unitconverterjetpackcomposesec24.data.Util.Converstion
@@ -11,6 +14,15 @@ import kotlinx.coroutines.launch
 class ConverterViewModel(
 	private val converterRepository : ConversionRepository
 ) : ViewModel() {
+	
+	//this state to catch the current seleted unit from dropdownmenu and save it to pass it to the Input Block To calculate
+	val selectedConversionfromMenu: MutableState<Converstion?> = mutableStateOf(null)
+	
+	//this state to catch the Inputed value
+	val inputText: MutableState<String> = mutableStateOf("")
+	
+	//this state to save the Inputed value to use in Calculation
+	val typedValue_fromTextField: MutableState<String> = mutableStateOf("0.0")
 	
 	fun getConverstions()= listOf(
 		Converstion(1,"Pounds to Kilograms","lbs","kg",0.453592),
@@ -32,6 +44,12 @@ class ConverterViewModel(
 	fun removeResult(result: ConversionResult){
 		viewModelScope.launch(Dispatchers.IO) {
 			converterRepository.deleteResult(result)
+		}
+	}
+	
+	fun clearAll(){
+		viewModelScope.launch (Dispatchers.IO){
+			converterRepository.deleteAllResults()
 		}
 	}
 	
