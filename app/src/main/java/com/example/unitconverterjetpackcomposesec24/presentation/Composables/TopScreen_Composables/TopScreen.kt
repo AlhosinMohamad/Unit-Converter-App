@@ -35,7 +35,9 @@ fun TopScreen(
 		mutableStateOf(false)
 	}//to prevent more than one save to the result in DB when Configuration Changes happen
 	
-	Column (modifier = Modifier.verticalScroll(rememberScrollState())){
+	Column (
+		modifier = Modifier.verticalScroll(rememberScrollState())
+	){
 		ConverstionMenu(
 			isLandScape = isLandScape,
 			conversionList = list){
